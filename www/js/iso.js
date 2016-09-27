@@ -5,9 +5,13 @@
 
 function leafletExample(){
 
-  // var latlon = [19.415120, -99.178637];
 
-  var latlon = [46.0463697, 14.5009232];
+
+                  
+
+  var latlon = [19.3908451 ,-99.191574];
+
+ 
 
   // initialize the Leaflet map, set the initial center and zoom level
   var map = L.map('mapid').setView(latlon, 12);
@@ -24,80 +28,26 @@ function leafletExample(){
   // - approximation of 100 meters
   // - BICYCLE travel type
   // - FAST speed
-  var isoline = isoEngine.getIsoline(latlon[0],latlon[1],iso4app.Time.SECONDS_600,10000,iso4app.Mobility.BICYCLE,iso4app.Speed.FAST);
+
+  // aprox 1000, 20 min, 30 min, 45 min. para coche.   trafico pesado = 5kmph y verylow
+
+
+  // var isoline = isoEngine.getIsoline(latlon[0],latlon[1],iso4app.Time.SECONDS_2700,1000,
+  //  iso4app.Mobility.MOTOR_VEHICLE,iso4app.Speed.VERY_LOW,iso4app.speed=10);
+
+  var isoline = isoEngine.getIsoline(latlon[0],latlon[1],iso4app.Time.SECONDS_1800,1000,
+  iso4app.Mobility.PEDESTRIAN,iso4app.Speed.LOW);
 
   if (isoline.errcode=="0"){
     //service responds without error
 
     // draw isodistance polygon
     var polyCoords = Array(), coord, polygon, isocoords = isoline.isocoords.split(",");
-    console.log(isocoords)
+    console.log(isocoords);
+
+    window.open('cords').document.body.innerHTML = '<h1>Las coordenadas de la primera</h1><p>'+isocoords+'</p>';
     
-     //a partir de aquí es el código que me madaste del la página
-
-    function convertArrayofObjectsToCSV(args) {
-        var result,
-            ctr,
-            keys,
-            columnDelimiter,
-            lineDelimiter,
-            data;
-
-        data = args.data || null ;
-        if (data == null || !data.length){
-            return null
-        }
-
-        columnDelimiter = args.columnDelimiter || ',';
-        lineDelimiter = args.lineDelimiter || '\n';
-
-        keys = Object.keys[0];
-
-        result = '';
-        result += keys.join(columnDelimiter);
-        result += lineDelimiter;
-
-        data.forEach(function(item) {
-            ctr = 0;
-            keys.forEach(function(key) {
-                if (ctr > 0) result += columnDelimiter;
-
-                result += item[key];
-                ctr++
-            });
-            result += lineDelimiter;
-        });
-
-        return result;
-
-    }
-
-    function downloadCSV(args) {
-        var data,
-            filename,
-            link;
-        
-        var csv = convertArrayofObjectsToCSV({
-            data:isocoords
-        });
-
-        if( csv == null) return;
-
-        filename = args.filename || 'export.csv';
-
-        if (!csv.match(/^data:text:\/csv/i)){
-            csv = 'data:text/csv;charset=utf-8,' + csv;
-        }
-        data= encodeURI(csv);
-
-        link = document.createElement('a')
-        link.setAttribute('href', data);
-        link.setAttribute('download', filename);
-        link.click(); 
-    }
-    
-    //DAVID, NO ESTOY SEGURO PERO CREO QUE LAS COORDENADAS SE GUARDAN EN ISOCOORDS
-      
+     
 
 
     for(j = 0; j < isocoords.length; j++){
